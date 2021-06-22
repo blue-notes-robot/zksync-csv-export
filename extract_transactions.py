@@ -83,20 +83,23 @@ def main(in_class="mined", out_class="remove funds"):
             my_trx["date"] = dto.strftime("%m/%d/%Y %H:%M:%S")
 
             # trx coming in
-            if td["to"].lower() == wallet.lower():
-                my_trx["transactionType"] = "deposit"
-                my_trx["inBuyAmount"] = float(td["amount"]) * 1e-18
-                my_trx["inBuyAsset"] = td["token"]
-                my_trx["classification (optional)"] = in_class
-            # trx going out
-            else:
-                my_trx["transactionType"] = "withdraw"
-                my_trx["outSellAmount"] = float(td["amount"]) * 1e-18
-                my_trx["outSellAsset"] = td["token"]
-                my_trx["classification (optional)"] = out_class
+            try:
+                if td["to"].lower() == wallet.lower():
+                    my_trx["transactionType"] = "deposit"
+                    my_trx["inBuyAmount"] = float(td["amount"]) * 1e-18
+                    my_trx["inBuyAsset"] = td["token"]
+                    my_trx["classification (optional)"] = in_class
+                # trx going out
+                else:
+                    my_trx["transactionType"] = "withdraw"
+                    my_trx["outSellAmount"] = float(td["amount"]) * 1e-18
+                    my_trx["outSellAsset"] = td["token"]
+                    my_trx["classification (optional)"] = out_class
 
-                my_trx["feeAsset (optional)"] = td["token"]
-                my_trx["feeAmount (optional)"] = float(td["fee"]) * 1e-18
+                    my_trx["feeAsset (optional)"] = td["token"]
+                    my_trx["feeAmount (optional)"] = float(td["fee"]) * 1e-18
+            except KeyError:
+                continue
 
             my_trx["operationId (optional)"] = tx_hash
 
